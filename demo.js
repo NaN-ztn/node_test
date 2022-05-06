@@ -1,6 +1,10 @@
-const http = require('http')
-const fs = require('fs')
-const url = require('url')
+import http from 'http'
+import fs from 'fs'
+import url, { fileURLToPath } from 'url'
+import path from 'path'
+
+// esm 中没有__dirname ,这是commonjs自带的
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 function serveStaticFile(res, path, contentType, responseType = 200) {
   fs.readFile(__dirname + path, (err, data) => {
