@@ -1,10 +1,34 @@
 <html>
-  <head>
-    <title>Meadowlark Travel</title>
-  </head>
-  <body>
-    {{! 这个表达式会被每个视图自己的HTML取代。在创建Handlebars实例时，我们指明了默认布局（defaultLayout:'main' ）。这就意味着除非你特别指明，否则所有视图用的都是这个布局。 }}
-    <header><img src="/img/logo.jpg" alt="Meadowlark Travel Logo" /></header>
-    {{{body}}}
-  </body>
+
+<head>
+  <title>Meadowlark Travel</title>
+  {{#if showTests}}
+    <link rel="stylesheet" href="/vendor/mocha.css">
+  {{/if}}
+  <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+</head>
+
+</head>
+
+{{#if showTests}}
+  <div id="mocha"></div>
+  <script src="/vendor/mocha.js"></script>
+  <script src="/vendor/chai.js"></script>
+  <script>
+    mocha.ui('tdd');
+    var assert = chai.assert; 
+  </script>
+  <script src="/qa/tests-global.js"></script>
+  {{#if pageTestScript}}
+    <script src="{{pageTestScript}}"></script>
+  {{/if}}
+  <script>mocha.run();</script>
+{{/if}}
+
+<body>
+  {{! 这个表达式会被每个视图自己的HTML取代。在创建Handlebars实例时，我们指明了默认布局（defaultLayout:'main' ）。这就意味着除非你特别指明，否则所有视图用的都是这个布局。 }}
+  <header><img src="/img/logo.jpg" alt="Meadowlark Travel Logo" /></header>
+  {{{body}}}
+</body>
+
 </html>

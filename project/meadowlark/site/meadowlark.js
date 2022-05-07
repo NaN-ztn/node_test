@@ -2,7 +2,7 @@ import express from "express";
 import { create } from "express-handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getRandomFortune } from "./lib/fortunes.js";
+import { getRandomFortune } from "./lib/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -36,16 +36,41 @@ app.get('/about', function (req, res) {
 // 可以直接指向/img/logo.png （注意：路径中没有public，这个目录对客户端来说是隐形的）
 app.use(express.static(__dirname + "/public"));
 
+// 目的：不希望测试一直运行，它不仅会拖慢网站的速度，而且用户也不想看到测试结果。默认情况下测试应该是禁用的，但应该非常容易启用。
+// 实现：中间件，如果test=1 出现在任何页面的查询字符串中（并且不是运行在生产服务器上），属性res.locals.showTests 就会被设为true 。
+// res.locals 实现了页面和路由之间的传参(模板中可直接使用)
+// 不同的是 res是针对当前请求的 app.locals是对于整个应用来说
+app.use(function (req, res, next) {
+  res.locals.showTests = app.get('env') !== 'production' &&
+    req.query.test === '1';
+  next();
+});
+
 // 无需设置状态码和内容类型（设置为200和text/html）
 // render()方法
 app.get("/", function (req, res) {
   res.render("home");
 });
+
 app.get("/about", function (req, res) {
   let randomFortune = getRandomFortune();
   // 给模板引擎传入变量，视图中动态内容
-  res.render("about", { fortune: randomFortune });
+  res.render("about", {
+    fortune: randomFortune,
+    pageTestScript: '/qa/tests-about.js'
+  });
 });
+
+// 跨页测试添加的路由
+app.get('/tours/hood-river', function (req, res) {
+  res.render('tours/hood-river');
+});
+
+app.get('/tours/request-group-rate', function (req, res) {
+  res.render('tours/request-group-rate');
+});
+
+
 
 // 404 catch-all处理器（中间件）
 app.use(function (req, res, next) {
