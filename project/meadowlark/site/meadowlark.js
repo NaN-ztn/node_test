@@ -2,6 +2,7 @@ import express from "express";
 import { create } from "express-handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
+import { getRandomFortune } from "./lib/fortunes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -15,13 +16,6 @@ const handlebars = create({ defaultLayout: "main", extname: ".hbs" });
 app.engine(".hbs", handlebars.engine);
 app.set("view engine", ".hbs");
 app.set("views", "./views");
-
-let fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need springs.",
-  "Do not fear what you don't know.",
-  "You will have a pleasant surprise.", "Whenever possible, keep it simple.",
-];
 
 // app.VERB 帮我们做了很多工作：它默认忽略了大小写或反斜杠，并且在进行匹配时也不考虑查询字符串
 // .get 是对路由的处理
@@ -48,7 +42,7 @@ app.get("/", function (req, res) {
   res.render("home");
 });
 app.get("/about", function (req, res) {
-  let randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+  let randomFortune = getRandomFortune();
   // 给模板引擎传入变量，视图中动态内容
   res.render("about", { fortune: randomFortune });
 });
