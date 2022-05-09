@@ -1,10 +1,13 @@
 const fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need springs.",
+  'Conquer your fears or they will conquer you.',
+  'Rivers need springs.',
   "Do not fear what you don't know.",
-  "You will have a pleasant surprise.", "Whenever possible, keep it simple.",
+  'You will have a pleasant surprise.',
+  'Whenever possible, keep it simple.',
 ];
 
 export function getRandomFortune() {
-  return fortunes[Math.floor(Math.random() * fortunes.length)]
+  return fortunes[Math.floor(Math.random() * fortunes.length)];
 }
+
+export * from './getWeatherData.js';
